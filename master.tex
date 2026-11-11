@@ -1,0 +1,408 @@
+% !TeX program = xelatex
+% 南航2026专业学位硕士论文：可读的单文件模板
+% 编译：latexmk -xelatex -outdir=build master.tex
+% 修改顺序：①基本信息 → ②摘要 → ③正文。字体文件保留在 fonts/。
+% 本文件直接使用标准 ctexbook，不再生成或依赖 nuaathesis.cls。
+
+\documentclass[a4paper,zihao=5,openany,twoside,fontset=none]{ctexbook}
+
+% ==================== 1. 基本信息（在此填写） ====================
+\newcommand{\ThesisTitle}{基于核的联想记忆及聚类算法的研究与应用}
+\newcommand{\CoverTitle}{基于核的联想记忆及聚类算法\\的研究与应用}
+\newcommand{\AuthorName}{×××}
+\newcommand{\CollegeName}{×××学院}
+\newcommand{\ProfessionalCategory}{××××××}
+\newcommand{\ProfessionalField}{××××××}
+\newcommand{\Supervisor}{××教授/副教授/讲师}
+\newcommand{\IndustrySupervisor}{××高级工程师/工程师（可选）} % 无则清空花括号
+\newcommand{\ChineseDate}{二О××年×月}
+\newcommand{\LibraryCode}{}
+\newcommand{\SubjectCode}{}
+\newcommand{\ThesisNumber}{}
+
+\newcommand{\EnglishTitle}{Research on Kernel-Based Associative Memories, Clustering Algorithms and their Applications}
+\newcommand{\EnglishAuthor}{××××}
+\newcommand{\EnglishCollege}{College of X X X X}
+\newcommand{\EnglishCategory}{专业类别英文名称}
+\newcommand{\EnglishSupervisor}{Prof. ××××}
+\newcommand{\EnglishDegree}{Master of 学位类别英文名称（详见附表）}
+\newcommand{\EnglishDate}{February, 2025} % 原Word示例日期，提交前修改
+
+% ==================== 2. 字体与排版（一般无需修改） ====================
+\usepackage{geometry,fancyhdr}
+\usepackage[indentafter]{titlesec}
+\usepackage{titletoc}
+\usepackage{graphicx,multicol,tabularx,booktabs,longtable}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{caption}
+\usepackage[numbers,square,comma,super,sort&compress]{natbib}
+\usepackage{etoolbox}
+\usepackage[unicode,hidelinks]{hyperref}
+
+\setmainfont[Path=fonts/,BoldFont=timesbd.ttf,ItalicFont=timesi.ttf,BoldItalicFont=timesbi.ttf]{times.ttf}
+\setCJKmainfont[Path=fonts/,AutoFakeBold=2]{song.ttf}
+\setCJKsansfont[Path=fonts/]{hei.ttf}
+\setCJKmonofont[Path=fonts/]{fangsong.ttf}
+\setCJKfamilyfont{zhsong}[Path=fonts/,AutoFakeBold=2]{song.ttf}
+\setCJKfamilyfont{zhhei}[Path=fonts/]{hei.ttf}
+\setCJKfamilyfont{zhkai}[Path=fonts/]{kai.ttf}
+\setCJKfamilyfont{zhfs}[Path=fonts/]{fangsong.ttf}
+\newfontfamily\jianqifont[Path=fonts/]{jianqi.ttf}
+\providecommand\songti{\CJKfamily{zhsong}}
+\providecommand\heiti{\CJKfamily{zhhei}}
+\providecommand\kaishu{\CJKfamily{zhkai}}
+\providecommand\fangsong{\CJKfamily{zhfs}}
+
+\xeCJKDeclareCharClass{CJK}{"2573}
+
+% 摘要标题采用Word实际使用的SimHei，两个空格也使用同一字体。
+\newfontfamily\wordheiLatin[Path=fonts/]{simhei.ttf}
+\setCJKfamilyfont{wordhei}[Path=fonts/]{simhei.ttf}
+
+% A4双面；连续换页，不插入奇偶页补白。
+\geometry{asymmetric,top=3.3cm,bottom=3.3cm,left=3cm,right=2.8cm,
+  headheight=15.6bp,headsep=\dimexpr .7cm-15.6bp\relax,footskip=.7cm}
+\let\cleardoublepage\clearpage
+\linespread{1}
+\makeatletter
+% 这一处底层命令用于固定正文为五号、20磅行距。
+\renewcommand{\normalsize}{\@setfontsize\normalsize{10.5bp}{20bp}}
+\makeatother
+\normalsize
+\setlength{\parindent}{21bp}
+\setlength{\parskip}{0pt}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+\ctexset{chapter={lofskip=0pt,lotskip=0pt}}
+\titleformat{\chapter}{\centering\wordheiLatin\CJKfamily{wordhei}\fontsize{15bp}{20bp}\selectfont}
+  {第\chinese{chapter}章}{1em}{}
+\titleformat*{\section}{\heiti\fontsize{14bp}{20bp}\selectfont}
+\titleformat*{\subsection}{\heiti\fontsize{12bp}{20bp}\selectfont}
+\titleformat*{\subsubsection}{\heiti\fontsize{12bp}{20bp}\selectfont}
+% Word章标题：段前后各1.5行、固定20磅；补偿titlesec页首行框后对齐实际位置。
+\titlespacing*{\chapter}{0pt}{9.454bp}{23.44bp}
+\titlespacing*{\section}{0pt}{7.8bp}{7.8bp}
+\titlespacing*{\subsection}{0pt}{7.8bp}{7.8bp}
+\titlespacing*{\subsubsection}{0pt}{7.8bp}{7.8bp}
+
+% 页眉与页码：摘要起启用；奇数页学校，偶数页论文题目。
+% 页码按Word：奇数页右下角（OR），偶数页左下角（EL）。
+\fancypagestyle{thesis}{
+  \fancyhf{}
+  \fancyhead[C]{\songti\fontsize{10.5bp}{20bp}\selectfont
+    % 保留页眉行框，仅上移文字基线；避免调整横线后压住文字。
+    \strut\smash{\raisebox{3.461bp}{%
+      \ifodd\value{page}南京航空航天大学专业学位硕士学位论文\else\ThesisTitle\fi}}}
+
+  \fancyfoot[OR,EL]{\fontsize{7.5bp}{10bp}\selectfont\thepage}
+  % Word页眉：单倍行距、段前后0；下边框0.75磅，距文字1磅。
+  % fancyhdr默认横线偏低；上移5.381磅，保持摘要标题/正文位置不动。
+  \renewcommand{\headrulewidth}{.75bp}
+  \renewcommand{\headrule}{%
+    \vskip-5.381bp
+    \hrule height .75bp width\headwidth
+    \vskip4.631bp
+  }
+  \renewcommand{\footrulewidth}{0pt}
+}
+\makeatletter
+\let\ps@plain\ps@thesis
+\makeatother
+\assignpagestyle{\chapter}{thesis}
+
+% 前置页共用标题：与已核对的目录页保持同一位置和上下间距。
+\newcommand{\FrontHeading}[1]{%
+  \begingroup
+    \xeCJKsetup{CJKecglue=0pt}
+    \titleformat{\chapter}{\centering\wordheiLatin\CJKfamily{wordhei}\fontsize{15bp}{20bp}\selectfont}{}{0pt}{}
+    \titlespacing*{\chapter}{0pt}{-8.786bp}{3.684bp}
+    \chapter*{#1}
+  \endgroup
+}
+
+% 自动目录：按Word的标题、层级缩进与文档网格设置。
+\renewcommand{\contentsname}{目\hbox{\wordheiLatin\char32\char32}录}
+\newcommand{\TocFont}{\songti\fontsize{10.5bp}{15.6bp}\selectfont}
+\contentsmargin{5.395bp} % 页码右边缘按Word制表位对齐（约521磅）
+\newcommand{\TocPage}{\hbox to5.114bp{\leaders\hbox{.}\hfill}\contentspage\hspace*{-5.114bp}}
+\titlecontents{chapter}[56.35bp]{\addvspace{1.92bp}\TocFont}
+  {\contentslabel{36.75bp}}{\hspace*{-36.75bp}}
+  {\titlerule*[2.625bp]{.}\TocPage}[\vspace{1.92bp}]
+\titlecontents{section}[52.5bp]{\TocFont}
+  {\contentslabel[\wordheiLatin\thecontentslabel]{32.9bp}}{}
+  {\titlerule*[2.625bp]{.}\TocPage}
+\titlecontents{subsection}[70.87bp]{\TocFont}
+  {\contentslabel[\wordheiLatin\thecontentslabel]{28.87bp}}{}
+  {\titlerule*[2.625bp]{.}\TocPage}
+\DeclareCaptionFont{thesis}{\songti\fontsize{10.5bp}{20bp}\selectfont}
+\captionsetup{font=thesis,labelsep=quad,justification=centering}
+\captionsetup[table]{position=top}
+\newcommand{\figtabnote}[1]{\par{\kaishu\fontsize{10.5bp}{20bp}\selectfont（注：#1）}\par}
+\graphicspath{{fig/}}
+\newcommand{\AppendixPlaceholder}{{\songti ╳╳╳╳╳╳╳╳}}
+\hypersetup{pdftitle={\ThesisTitle},pdfauthor={\AuthorName}}
+
+\begin{document}
+\pagestyle{empty}
+
+% ==================== 3. 中文封面 ====================
+\begingroup
+\begin{multicols}{2}
+  \songti\fontsize{10.5bp}{15.6bp}\selectfont
+  \begin{flushleft}
+    中图分类号：\LibraryCode\par 学科分类号：\SubjectCode
+  \end{flushleft}
+  \columnbreak
+  \begin{flushright}论文编号：\ThesisNumber\end{flushright}
+\end{multicols}
+\vspace{\stretch{2}}
+\begin{center}
+  {\songti\fontsize{36bp}{43.2bp}\selectfont 专业学位硕士学位论文}
+  \vspace{\stretch{2}}
+
+  {\heiti\fontsize{26bp}{31.2bp}\selectfont\CoverTitle}
+\end{center}
+\vspace{\stretch{3}}
+\begin{center}
+  \songti\fontsize{16bp}{20bp}\selectfont
+  \begin{tabular}{l@{\hspace{1cm}}l}
+    研究生姓名 & \AuthorName \\
+    专业类别 & \ProfessionalCategory \\
+    专业领域 & \ProfessionalField \\
+    指导教师 & \Supervisor \\
+    \ifdefempty{\IndustrySupervisor}{}{行业导师 & \IndustrySupervisor \\}
+  \end{tabular}
+\end{center}
+\vspace{\stretch{3}}
+\begin{center}
+  {\jianqifont\fontsize{22bp}{26.4bp}\selectfont 南京航空航天大学}\par
+  {\songti\fontsize{14bp}{17.5bp}\selectfont 研究生院\quad\CollegeName\par\ChineseDate\par}
+\end{center}
+\par\endgroup
+\clearpage
+
+% ==================== 4. 英文封面 ====================
+\begingroup
+\begin{center}
+  \linespread{1.5}\fontsize{14bp}{14bp}\selectfont
+  Nanjing University of Aeronautics and Astronautics\par
+  The Graduate School\par
+  \EnglishCollege\vspace{\stretch{1}}
+
+  {\linespread{1}\fontsize{22bp}{26.4bp}\bfseries\selectfont\EnglishTitle\par}
+  \vspace{\stretch{1}}
+  \linespread{1.75}\fontsize{14bp}{16.8bp}\selectfont
+  A Thesis in\\\EnglishCategory\\by\\\EnglishAuthor\\
+  Advised by\\\EnglishSupervisor\par\bigskip
+  Submitted in Partial Fulfillment\\of the Requirements\\
+  for the Degree of\\\EnglishDegree\par\bigskip
+  \EnglishDate
+\end{center}
+\par\endgroup
+\clearpage
+
+% ==================== 5. 独创性与使用授权声明 ====================
+\clearpage\thispagestyle{empty}
+\begingroup\linespread{1}\songti\fontsize{16bp}{20bp}\selectfont
+\setlength{\parindent}{2\ccwd}\setlength{\parskip}{0pt}
+\begin{center}\songti\fontsize{22bp}{30bp}\selectfont 独创性声明\end{center}
+\vspace{15.6bp}
+\noindent\hspace*{2\ccwd}本人声明所呈交的硕士学位论文是本人在导师指导下进行的研究工作及取得的研究成果。除了文中特别加以标注和致谢的地方外，论文中不包含其他人已经发表或撰写过的研究成果，也不包含为获得南京航空航天大学或其他教育机构的学位或证书而使用过的材料。
+\par\vspace{7.8bp}\indent 研究生签名：\underline{\hspace{2.4cm}}\quad 日期：\underline{\hspace{2.4cm}}
+\par\vspace{25bp}
+\begin{center}\songti\fontsize{22bp}{30bp}\selectfont 使用授权声明\end{center}
+\vspace{15.6bp}
+\noindent\hspace*{2\ccwd}本人完全了解南京航空航天大学有关保留、使用学位论文的规定，即学校有权保留并向国家有关部门或机构送交论文的复印件和电子版，允许论文被查阅和借阅。本人授权南京航空航天大学可以将本学位论文的全部内容编入有关数据库进行检索，可以采用影印、缩印或扫描等复制手段保存、汇编学位论文。
+\par\vspace{7.8bp}\indent 研究生签名：\underline{\hspace{1.3cm}}导师签名：\underline{\hspace{1.3cm}}日期：\underline{\hspace{1.3cm}}
+\endgroup\clearpage
+
+
+% ==================== 6. 中文摘要（在此修改正文与关键词） ====================
+\frontmatter
+\pagenumbering{Roman}
+\pagestyle{thesis}
+\begingroup
+  % Word原生对比：15磅SimHei，两个同字体空格。
+  % 负间距用于抵消titlesec额外行框，实际标题/首行基线为114.72/140.88磅。
+  \xeCJKsetup{CJKecglue=0pt}
+  \titleformat{\chapter}{\centering\wordheiLatin\CJKfamily{wordhei}\fontsize{15bp}{20bp}\selectfont}{}{0pt}{}
+  \titlespacing*{\chapter}{0pt}{-8.786bp}{-13.84bp}
+  \chapter*{摘\hbox{\wordheiLatin\char32\char32}要}
+\endgroup
+\vspace{20bp} % 保持Word标题与首行正文的基线间距
+目前，支持向量机算法（SVMs）在模式识别、图像处理以及生物信息学等很多领域中都已经获得了非常成功的应用。
+
+………………
+
+两种算法均能有效地解决医学图像中固有的含噪声以及灰度不均匀性等问题，从而取得较好的图像分割结果。
+
+\par\vspace{60bp}
+\noindent\textbf{关键词：}核方法，支持向量机，……
+\clearpage
+
+% ==================== 7. 英文摘要 ====================
+\begingroup
+  % Word原生格式：Times New Roman 14磅加粗，段前后0、单倍并对齐网格。
+  % 补偿titlesec行框，使标题基线距顶114.24磅。
+  \titlespacing*{\chapter}{0pt}{-9.266bp}{10.24bp}
+  \chapter*{{\rmfamily\bfseries\fontsize{14bp}{20bp}\selectfont ABSTRACT}}
+\endgroup
+\begingroup
+  \fontsize{10.5bp}{14bp}\selectfont
+  \setlength{\parindent}{10.5bp}
+  \XeTeXcharclass"2026=0\relax % 英文省略号使用Times New Roman，与Word一致
+At present, ……
+
+  % 还原Word示例的空白段落；写作时可删除这些额外空白。
+  \par\vspace{24.88bp}
+Most of the ……
+
+  \par\vspace{44.56bp}
+  \noindent\makebox[59.493bp][l]{\textbf{Keywords:}}Kernel method, support vector machine,……
+  \par
+\endgroup
+\clearpage
+
+% ==================== 8. 目录与图表清单 ====================
+\FrontHeading{\contentsname}
+\makeatletter\@starttoc{toc}\makeatother
+\clearpage
+
+% Word 模板中的示例清单；页码为原文示例值，不代表本PDF实际页码。
+\FrontHeading{图表清单}
+\vspace{4.226bp} % 首行基线与目录首条保持一致
+\begingroup\linespread{1}\fontsize{10.5bp}{13bp}\selectfont
+\noindent 图1.1 监督学习的块图表\dotfill 2\par
+\noindent 图1.2 增强学习的块图表\dotfill 2\par
+\noindent 图1.3 无监督学习的块图表\dotfill 2\par
+\noindent 图1.4 Cover模式可分性定理的一个示例\dotfill 5\par
+…………
+
+\noindent 表4.1 Lena和Goldhill图像的基于IeBAM的渐进压缩结果\dotfill 44\par
+…………
+
+\par\endgroup
+
+\clearpage
+
+
+% ---------- 注释表与缩略词 ----------
+\FrontHeading{注释表}
+\begingroup\setlength{\tabcolsep}{4pt}
+\noindent\begin{tabularx}{\textwidth}[t]{|p{.23\textwidth}|X|p{.15\textwidth}|X|}\hline
+$\scriptstyle A,\ A_0$ & 状态方程矩阵 & $\scriptstyle e$ & 误差绝对值 \\ \hline
+$\scriptstyle a$ & 重心到前轴的距离 & $\scriptstyle e_c$ & 误差变化率 \\ \hline
+$\scriptstyle a_0,\ a_1,\ a_2,\ a_3$ & 多项式系数 & $\scriptstyle F(\omega)$ & 多项式 \\ \hline
+$\scriptstyle a_{c0}$ & 加速度变量 & $\scriptstyle F_i,\ \theta_i$ & Fadeev递归算法中间变量 \\ \hline
+$\scriptstyle a_{s1},\ a_{s0}$ & 连轴器及传动轴简化模型传递系数 & $\scriptstyle F_X$ & 汽车总制动力 \\ \hline
+ &  & $\scriptstyle F_Y$ & 汽车总侧向力 \\ \hline
+$\scriptstyle a_y$ & 横向加速度 & $\scriptstyle f_b$ & 轮胎制动力 \\ \hline
+$\scriptstyle a_{yc}$ & 横向加速度极限值 & $\scriptstyle f_{bi},\ f_{ci}$ & 各轮制动力和侧偏力 \\ \hline
+$\scriptstyle \tilde a_0,\ \tilde a_1,\ \tilde a_2,\ \tilde a_3$ & 多项式系数 & $\scriptstyle G$ & 状态方程矩阵 \\ \hline
+$\scriptstyle B,\ B_0,\ B_1$ & 状态方程矩阵 & $\scriptstyle g$ & 重力加速度 \\ \hline
+$\scriptstyle B_{w1},\ B_{w2}$ & 状态方程矩阵 & $\scriptstyle H$ & 汽车重心高度 \\ \hline
+$\scriptstyle b$ & 重心到后轴的距离 & $\scriptstyle H(j\omega)$ & 频响函数 \\ \hline
+$\scriptstyle b_0,\ b_1,\ b_2,\ b_3$ & 多项式系数 & $\scriptstyle h$ & 汽车重心到侧倾中心的距离 \\ \hline
+$\scriptstyle b_m$ & 电机阻尼比系数 & $\scriptstyle h_r$ & 汽车侧倾中心高度 \\ \hline
+\end{tabularx}\endgroup
+\clearpage
+\FrontHeading{缩略词}
+% Word原表：两列、完整细边框；首列表头左对齐，其余单元格居中。
+\vspace{-11.364bp} % 表格上边框中心距顶126.24磅，与Word一致
+\begingroup
+  \fontsize{10.5bp}{19.44bp}\selectfont
+  \setlength{\tabcolsep}{5bp}
+  \setlength{\arrayrulewidth}{.48bp}
+  \noindent\hspace*{2.561bp}% Word表格比正文左边界内缩约2.6磅
+  \begin{tabular}[t]{|>{\centering\arraybackslash}p{60.56bp}|>{\centering\arraybackslash}p{344bp}|}
+    \hline
+    \multicolumn{1}{|l|}{缩略词} & 英文全称 \\ \hline
+    WSNs  & Wireless Sensor Networks \\ \hline
+    CAM   & Center Angle Method \\ \hline
+    LEACH & Low-Energy Adaptive Clustering Hierarchy \\ \hline
+  \end{tabular}
+\par\endgroup
+
+\clearpage
+
+\mainmatter
+
+% ==================== 9. 正文（从这里开始写作） ====================
+\chapter{绪论}
+\section{引言（一级标题）}
+人……
+
+基于……
+\subsection{学习的定义（二级标题）}
+由于
+\subsection{三种学习方式}
+\section{基于核的学习}
+\subsection{核方法的实质}
+可以从如下几个方面来理解核代入方法的实质：
+
+首先，由T. M. Cover的模式可分性定理可以知道，一个复杂的模式分类问题映射到高维空间后，会比在低维空间里更容易变得线性可分。（A complex pattern classification problem cast in a high-dimensional space nonlinearly is more likely to be linearly separable than in a low-dimensional space.）\textsuperscript{[1]}。图1.4给出了一个低维空间中的非线性问题映射到高维空间后变成线性问题的一个示例。
+\subsection{典型的基于核的学习算法}
+\subsection{核学习算法的应用}
+\section{本文的主要研究工作}
+\section{本文的内容安排}
+………
+
+………
+
+\clearpage
+
+\backmatter
+
+% ==================== 10. 参考文献与文后部分 ====================
+\chapter{参考文献}
+\setlength{\parindent}{20.6bp}
+几种主要参考文献著录表的格式为：
+
+连续出版物：［序号］作者.文题.刊名,年,卷号(期号):起\textasciitilde 止页码.
+
+专译著：［序号］作者.书名(译者).出版地:出版者,出版年:起\textasciitilde 止页码.
+
+论文集：［序号］作者.文题.编者,文集名,出版地:出版者,出版年:起\textasciitilde 止页码.
+
+学位论文：［序号］姓名.文题,[××学位论文].授予单位所在地:授予单位,授予年.
+
+专利：［序号］申请者.专利名,国名,专利文献种类,专利号,出版日期.
+
+技术标准：［序号］发布单位,技术标准代号,技术标准名称,出版地:出版者,出版日期.
+
+\clearpage
+
+
+% ---------- 致谢 ----------
+\chapter[致\space 谢]{致\hskip 2\ccwd{}谢}
+% 在此填写致谢。
+
+\clearpage
+
+
+% ---------- 在学期间的研究成果 ----------
+\begingroup\sloppy
+\chapter{在学期间的研究成果及发表的学术论文}
+{\par\noindent\fontsize{12bp}{20bp}\selectfont 攻读硕士学位期间发表（录用）论文情况\par}
+Zhang Daoqiang, Chen Songcan. A novel multi-valued BAM model with improved error-correcting capability. Journal of Electronics, 2003, 20(3):220\textasciitilde223.
+
+……
+{\par\noindent\fontsize{12bp}{20bp}\selectfont 攻读硕士学位期间参加科研项目情况\par}
+……
+\endgroup
+
+\clearpage
+
+
+% ---------- 附录 ----------
+\begingroup
+\titlespacing*{\chapter}{0pt}{17bp}{16.5bp}
+\titleformat{\chapter}{\centering\heiti\fontsize{15bp}{26bp}\selectfont}{}{0pt}{}
+\chapter*{附录 \AppendixPlaceholder}
+\addcontentsline{toc}{chapter}{附录 \AppendixPlaceholder}
+……
+\par\endgroup
+
+\clearpage
+
+\end{document}
