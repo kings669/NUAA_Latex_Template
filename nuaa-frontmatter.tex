@@ -1,75 +1,100 @@
 \pagestyle{empty}
 
+% 封面按 Word 导出页的文字基线定位。每块可随实际内容换行，
+% 内容超出预留高度时，后续块顺延。
+\newsavebox{\CoverBlockBox}
+\newcommand{\CoverBlock}[2]{%
+  \setbox\CoverBlockBox=\vtop{#2\par}%
+  \nointerlineskip
+  \vbox to \ifdim\dp\CoverBlockBox>#1 \dp\CoverBlockBox\else #1\fi{%
+    \kern-\ht\CoverBlockBox
+    \box\CoverBlockBox
+    \vfil
+  }%
+}
+
 % ==================== 3. 中文封面 ====================
 \begingroup
-\begin{multicols}{2}
+\hrule height 0pt
+\kern\dimexpr11.507bp-\topskip\relax
+\CoverBlock{117.72bp}{%
   \songti\fontsize{10.5bp}{15.6bp}\selectfont
-  \begin{flushleft}
-    中图分类号：\LibraryCode\par 学科分类号：\SubjectCode
-  \end{flushleft}
-  \columnbreak
-  \begin{flushright}论文编号：\ThesisNumber\end{flushright}
-\end{multicols}
-\vspace{\stretch{2}}
-\begin{center}
-  {\songti\fontsize{36bp}{43.2bp}\selectfont 专业学位硕士学位论文}
-  \vspace{\stretch{2}}
-
-  {\heiti\fontsize{26bp}{31.2bp}\selectfont\CoverTitle}
-\end{center}
-\vspace{\stretch{3}}
-\begin{center}
-  \songti\fontsize{16bp}{20bp}\selectfont
-  \begin{tabular}{l@{\hspace{1cm}}l}
+  \noindent\makebox[283.46bp][l]{中图分类号：\LibraryCode}论文编号：\ThesisNumber\par
+  \noindent 学科分类号：\SubjectCode
+}
+\CoverBlock{75.12bp}{%
+  \centering\songti\fontsize{34bp}{43.2bp}\selectfont 专业学位硕士学位论文
+}
+\CoverBlock{144.60bp}{%
+  \centering\heiti\fontsize{26bp}{46.8bp}\selectfont\CoverTitle
+}
+\CoverBlock{251.16bp}{%
+  \songti\fontsize{16bp}{31.2bp}\selectfont
+  \noindent\hspace*{81bp}%
+  \begin{tabular}[t]{@{}p{107.7bp}@{}>{\raggedright\arraybackslash}p{\dimexpr\textwidth-188.7bp\relax}@{}}
     研究生姓名 & \AuthorName \\
-    专业类别 & \ProfessionalCategory \\
-    专业领域 & \ProfessionalField \\
-    指导教师 & \Supervisor \\
-    \ifdefempty{\IndustrySupervisor}{}{行业导师 & \IndustrySupervisor \\}
+    \makebox[78.4bp][s]{专 业 类 别} & \ProfessionalCategory \\
+    \makebox[78.4bp][s]{专 业 领 域} & \ProfessionalField \\
+    \makebox[78.4bp][s]{指 导 教 师} & \Supervisor \\
+    \ifdefempty{\IndustrySupervisor}{}{\makebox[78.4bp][s]{行 业 导 师} & \IndustrySupervisor \\}
   \end{tabular}
-\end{center}
-\vspace{\stretch{3}}
-\begin{center}
-  {\jianqifont\fontsize{22bp}{26.4bp}\selectfont 南京航空航天大学}\par
-  {\songti\fontsize{14bp}{17.5bp}\selectfont 研究生院\quad\CollegeName\par\ChineseDate\par}
-\end{center}
-\par\endgroup
+}
+\CoverBlock{26.04bp}{%
+  \centering\jianqifont\fontsize{22bp}{26.4bp}\selectfont 南京航空航天大学
+}
+\CoverBlock{22.8bp}{%
+  \centering\songti\fontsize{14bp}{22.8bp}\selectfont 研究生院\quad\CollegeName
+}
+\CoverBlock{0bp}{%
+  \centering\songti\fontsize{14bp}{22.8bp}\selectfont\ChineseDate
+}
+\endgroup
 \clearpage
 
 % ==================== 4. 英文封面 ====================
 \begingroup
-\begin{center}
-  \linespread{1.5}\fontsize{14bp}{14bp}\selectfont
+\hrule height 0pt
+\kern\dimexpr13.067bp-\topskip\relax
+\CoverBlock{114bp}{%
+  \centering\fontsize{14bp}{24.12bp}\selectfont
   Nanjing University of Aeronautics and Astronautics\par
   The Graduate School\par
-  \EnglishCollege\vspace{\stretch{1}}
-
-  {\linespread{1}\fontsize{22bp}{26.4bp}\bfseries\selectfont\EnglishTitle\par}
-  \vspace{\stretch{1}}
-  \linespread{1.75}\fontsize{14bp}{16.8bp}\selectfont
-  A Thesis in\\\EnglishCategory\\by\\\EnglishAuthor\\
-  Advised by\\\EnglishSupervisor\par\bigskip
-  Submitted in Partial Fulfillment\\of the Requirements\\
-  for the Degree of\\\EnglishDegree\par\bigskip
-  \EnglishDate
-\end{center}
-\par\endgroup
+  \EnglishCollege
+}
+\CoverBlock{127.92bp}{%
+  \centering\bfseries\fontsize{22bp}{31.2bp}\selectfont\EnglishTitle
+}
+\CoverBlock{24.72bp}{\centering\fontsize{14bp}{31.2bp}\selectfont A Thesis in}
+\CoverBlock{33.24bp}{\centering\fontsize{14bp}{31.2bp}\selectfont\EnglishCategory}
+\CoverBlock{23.64bp}{\centering\fontsize{14bp}{31.2bp}\selectfont by}
+\CoverBlock{31.2bp}{\centering\fontsize{14bp}{31.2bp}\selectfont\EnglishAuthor}
+\CoverBlock{31.2bp}{\centering\fontsize{14bp}{31.2bp}\selectfont Advised by}
+\CoverBlock{39.72bp}{\centering\fontsize{14bp}{31.2bp}\selectfont\EnglishSupervisor}
+\CoverBlock{32.16bp}{\centering\fontsize{14bp}{31.2bp}\selectfont Submitted in Partial Fulfillment}
+\CoverBlock{32.28bp}{\centering\fontsize{14bp}{31.2bp}\selectfont of the Requirements}
+\CoverBlock{39.72bp}{\centering\fontsize{14bp}{31.2bp}\selectfont for the Degree of}
+\CoverBlock{62.4bp}{\centering\fontsize{14bp}{31.2bp}\selectfont\EnglishDegree}
+\CoverBlock{0bp}{\centering\fontsize{14bp}{31.2bp}\selectfont\EnglishDate}
+\endgroup
 \clearpage
 
 % ==================== 5. 独创性与使用授权声明 ====================
 \clearpage\thispagestyle{empty}
-\begingroup\linespread{1}\songti\fontsize{16bp}{20bp}\selectfont
+\begingroup\linespread{1}\songti\fontsize{16bp}{31.2bp}\selectfont
 \setlength{\parindent}{2\ccwd}\setlength{\parskip}{0pt}
-\begin{center}\songti\fontsize{22bp}{30bp}\selectfont 独创性声明\end{center}
-\vspace{15.6bp}
-\noindent\hspace*{2\ccwd}本人声明所呈交的硕士学位论文是本人在导师指导下进行的研究工作及取得的研究成果。除了文中特别加以标注和致谢的地方外，论文中不包含其他人已经发表或撰写过的研究成果，也不包含为获得南京航空航天大学或其他教育机构的学位或证书而使用过的材料。
-\par\vspace{7.8bp}\indent 研究生签名：\underline{\hspace{2.4cm}}\quad 日期：\underline{\hspace{2.4cm}}
-\par\vspace{25bp}
-\begin{center}\songti\fontsize{22bp}{30bp}\selectfont 使用授权声明\end{center}
-\vspace{15.6bp}
-\noindent\hspace*{2\ccwd}本人完全了解南京航空航天大学有关保留、使用学位论文的规定，即学校有权保留并向国家有关部门或机构送交论文的复印件和电子版，允许论文被查阅和借阅。本人授权南京航空航天大学可以将本学位论文的全部内容编入有关数据库进行检索，可以采用影印、缩印或扫描等复制手段保存、汇编学位论文。
-\par\vspace{7.8bp}\indent 研究生签名：\underline{\hspace{1.3cm}}导师签名：\underline{\hspace{1.3cm}}日期：\underline{\hspace{1.3cm}}
-\endgroup\clearpage
+\hrule height 0pt
+\kern\dimexpr23.507bp-\topskip\relax
+\CoverBlock{44.64bp}{\centering\songti\fontsize{22bp}{30bp}\selectfont 独创性声明}
+\kern-13.13bp
+\nointerlineskip\noindent\hspace*{2\ccwd}本人声明所呈交的硕士学位论文是本人在导师指导下进行的研究工作及取得的研究成果。除了文中特别加以标注和致谢的地方外，论文中不包含其他人已经发表或撰写过的研究成果，也不包含为获得南京航空航天大学或其他教育机构的学位或证书而使用过的材料。
+\par\vspace{7.8bp}\indent \makebox[224bp][l]{研究生签名：\underline{\hspace{104bp}}}日期：\underline{\hspace{112bp}}
+\par\vspace{92.56bp}
+\CoverBlock{44.64bp}{\centering\songti\fontsize{22bp}{30bp}\selectfont 使用授权声明}
+\kern-13.13bp
+\nointerlineskip\noindent\hspace*{2\ccwd}本人完全了解南京航空航天大学有关保留、使用学位论文的规定，即学校有权保留并向国家有关部门或机构送交论文的复印件和电子版，允许论文被查阅和借阅。本人授权南京航空航天大学可以将本学位论文的全部内容编入有关数据库进行检索，可以采用影印、缩印或扫描等复制手段保存、汇编学位论文。
+\par\vspace{7.8bp}\indent \makebox[152bp][l]{研究生签名：\underline{\hspace{56bp}}}%
+\makebox[136bp][l]{导师签名：\underline{\hspace{56bp}}}日期：\underline{\hspace{56bp}}
+\par\endgroup\clearpage
 
 
 % ==================== 中文摘要 ====================
@@ -116,13 +141,16 @@
 \clearpage
 
 \FrontHeading{图表清单}
-\vspace{4.226bp} % 首行基线与目录首条保持一致
+\vspace{.686bp} % 与 Word 示例的清单首行位置对齐
 \IfFileExists{\NUAAContentDirectory/figure-table-list.tex}{%
   \ThesisInput{figure-table-list}%
 }{%
-  \csname @starttoc\endcsname{lof}%
-  \bigskip
-  \csname @starttoc\endcsname{lot}%
+  \begingroup
+    \fontsize{10.5bp}{18.72bp}\selectfont
+    \csname @starttoc\endcsname{lof}%
+    \par\vspace{18.72bp}%
+    \csname @starttoc\endcsname{lot}%
+  \par\endgroup
 }
 \clearpage
 
