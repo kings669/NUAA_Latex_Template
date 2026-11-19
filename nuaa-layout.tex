@@ -17,7 +17,8 @@
 \setCJKfamilyfont{zhhei}[Path=fonts/]{hei.ttf}
 \setCJKfamilyfont{zhkai}[Path=fonts/]{kai.ttf}
 \setCJKfamilyfont{zhfs}[Path=fonts/]{fangsong.ttf}
-\newfontfamily\jianqifont[Path=fonts/]{jianqi.ttf}
+% 校名为中文，必须使用 xeCJK 字体命令。
+\newCJKfontfamily\jianqifont[Path=fonts/]{jianqi.ttf}
 \providecommand\songti{\CJKfamily{zhsong}}
 \providecommand\heiti{\CJKfamily{zhhei}}
 \providecommand\kaishu{\CJKfamily{zhkai}}
