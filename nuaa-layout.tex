@@ -9,12 +9,12 @@
 \usepackage{etoolbox}
 \usepackage[unicode,hidelinks]{hyperref}
 
-\setmainfont[Path=fonts/,BoldFont=timesbd.ttf,ItalicFont=timesi.ttf,BoldItalicFont=timesbi.ttf]{times.ttf}
+\setmainfont[Path=fonts/,NFSSFamily=thesistimes,BoldFont=timesbd.ttf,ItalicFont=timesi.ttf,BoldItalicFont=timesbi.ttf]{times.ttf}
 \setCJKmainfont[Path=fonts/,AutoFakeBold=2]{song.ttf}
 \setCJKsansfont[Path=fonts/]{hei.ttf}
 \setCJKmonofont[Path=fonts/]{fangsong.ttf}
 \setCJKfamilyfont{zhsong}[Path=fonts/,AutoFakeBold=2]{song.ttf}
-\setCJKfamilyfont{zhhei}[Path=fonts/]{hei.ttf}
+\setCJKfamilyfont{zhhei}[Path=fonts/]{simhei.ttf}
 \setCJKfamilyfont{zhkai}[Path=fonts/]{kai.ttf}
 \setCJKfamilyfont{zhfs}[Path=fonts/]{fangsong.ttf}
 % 校名为中文，必须使用 xeCJK 字体命令。
@@ -26,9 +26,35 @@
 
 \xeCJKDeclareCharClass{CJK}{"2573}
 
-% 摘要标题采用Word实际使用的SimHei，两个空格也使用同一字体。
+% Word 的黑体标题统一使用 SimHei，编号和空格也使用该字体。
 \newfontfamily\wordheiLatin[Path=fonts/]{simhei.ttf}
-\setCJKfamilyfont{wordhei}[Path=fonts/]{simhei.ttf}
+\newcommand{\WordHei}{\wordheiLatin\CJKfamily{zhhei}}
+\newfontfamily\wordsongLatin[Path=fonts/]{song.ttf}
+
+% 注释表的变量、标点与下标按 Word 样例排版，正文公式沿用原有数学字体。
+\DeclareSymbolFont{symboltableupright}{TU}{thesistimes}{m}{n}
+\DeclareSymbolFont{symboltableitalic}{TU}{thesistimes}{m}{it}
+\DeclareMathSizes{11.9bp}{11.9bp}{7bp}{5bp}
+\ExplSyntaxOn
+\NewDocumentCommand{\ThesisSymbol}{m}
+  {
+    \group_begin:
+    \fontsize{11.9bp}{20bp}\selectfont
+    \int_step_inline:nnn { `A } { `Z }
+      { \Umathcode ##1 = 7 \symsymboltableitalic ##1 \scan_stop: }
+    \int_step_inline:nnn { `a } { `z }
+      { \Umathcode ##1 = 7 \symsymboltableitalic ##1 \scan_stop: }
+    \int_step_inline:nnn { `0 } { `9 }
+      { \Umathcode ##1 = 0 \symsymboltableupright ##1 \scan_stop: }
+    \Umathcode `, = 6 \symsymboltableupright `, \scan_stop:
+    \Umathcode `( = 4 \symsymboltableupright `( \scan_stop:
+    \Umathcode `) = 5 \symsymboltableupright `) \scan_stop:
+    \Umathchardef \theta = 0 \symsymboltableitalic "03B8 \scan_stop:
+    \Umathchardef \omega = 0 \symsymboltableitalic "03C9 \scan_stop:
+    \( #1 \)
+    \group_end:
+  }
+\ExplSyntaxOff
 
 % A4双面；连续换页，不插入奇偶页补白。
 \geometry{asymmetric,top=3.3cm,bottom=3.3cm,left=3cm,right=2.8cm,
@@ -45,11 +71,11 @@
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{3}
 \ctexset{chapter={lofskip=0pt,lotskip=0pt}}
-\titleformat{\chapter}{\centering\wordheiLatin\CJKfamily{wordhei}\fontsize{15bp}{20bp}\selectfont}
+\titleformat{\chapter}{\centering\WordHei\fontsize{15bp}{20bp}\selectfont}
   {第\chinese{chapter}章}{1em}{}
-\titleformat*{\section}{\heiti\fontsize{14bp}{20bp}\selectfont}
-\titleformat*{\subsection}{\heiti\fontsize{12bp}{20bp}\selectfont}
-\titleformat*{\subsubsection}{\heiti\fontsize{12bp}{20bp}\selectfont}
+\titleformat*{\section}{\WordHei\fontsize{14bp}{20bp}\selectfont}
+\titleformat*{\subsection}{\WordHei\fontsize{12bp}{20bp}\selectfont}
+\titleformat*{\subsubsection}{\WordHei\fontsize{12bp}{20bp}\selectfont}
 % Word章标题：段前后各1.5行、固定20磅；补偿titlesec页首行框后对齐实际位置。
 \titlespacing*{\chapter}{0pt}{9.454bp}{23.44bp}
 \titlespacing*{\section}{0pt}{7.8bp}{7.8bp}
@@ -65,7 +91,7 @@
     \strut\smash{\raisebox{3.461bp}{%
       \ifodd\value{page}南京航空航天大学专业学位硕士学位论文\else\ThesisTitle\fi}}}
 
-  \fancyfoot[OR,EL]{\fontsize{7.5bp}{10bp}\selectfont\thepage}
+  \fancyfoot[OR,EL]{\fontsize{9bp}{10bp}\selectfont\thepage}
   % Word页眉：单倍行距、段前后0；下边框0.75磅，距文字1磅。
   % fancyhdr默认横线偏低；上移5.381磅，保持摘要标题/正文位置不动。
   \renewcommand{\headrulewidth}{.75bp}
@@ -85,7 +111,7 @@
 \newcommand{\FrontHeading}[1]{%
   \begingroup
     \xeCJKsetup{CJKecglue=0pt}
-    \titleformat{\chapter}{\centering\wordheiLatin\CJKfamily{wordhei}\fontsize{15bp}{20bp}\selectfont}{}{0pt}{}
+    \titleformat{\chapter}{\centering\WordHei\fontsize{15bp}{20bp}\selectfont}{}{0pt}{}
     \titlespacing*{\chapter}{0pt}{-8.786bp}{3.684bp}
     \chapter*{#1}
   \endgroup
@@ -115,7 +141,7 @@
 \newcommand{\ThesisAppendixHeading}[1]{%
   \begingroup
   \titlespacing*{\chapter}{0pt}{17bp}{16.5bp}%
-  \titleformat{\chapter}{\centering\heiti\fontsize{15bp}{26bp}\selectfont}{}{0pt}{}%
+  \titleformat{\chapter}{\centering\WordHei\fontsize{15bp}{26bp}\selectfont}{}{0pt}{}%
   \chapter*{附录 #1}%
   \addcontentsline{toc}{chapter}{附录 #1}%
   \endgroup

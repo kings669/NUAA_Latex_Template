@@ -54,7 +54,7 @@ cp -R examples thesis
 | `thesis/chapters.tex` | 正文入口，可以用 `\input{thesis/chapters/01-introduction}` 按章拆分 |
 | `thesis/backmatter.tex` | 参考文献、致谢、研究成果及可选附录 |
 | `thesis/figure-table-list.tex` | 示例的手写清单。删除此副本后会自动生成图、表清单 |
-| `thesis/symbols.tex`、`thesis/abbreviations.tex` | 注释表和缩略词表的表格行。最后一行由模板加底线，无需写 \\ \hline。可省略对应文件 |
+| `thesis/symbols.tex`、`thesis/abbreviations.tex` | 注释表和缩略词表的表格行。注释表变量可用 `\ThesisSymbol{A_0}` 输入。最后一行由模板加底线，无需写 \\ \hline。可省略对应文件 |
 | `thesis/preamble.tex` | 可选，用于加载个人论文所需的宏包和自定义命令 |
 | `thesis/fig/` | 论文图片 |
 
