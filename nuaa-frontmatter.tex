@@ -1,0 +1,155 @@
+\pagestyle{empty}
+
+% ==================== 3. 中文封面 ====================
+\begingroup
+\begin{multicols}{2}
+  \songti\fontsize{10.5bp}{15.6bp}\selectfont
+  \begin{flushleft}
+    中图分类号：\LibraryCode\par 学科分类号：\SubjectCode
+  \end{flushleft}
+  \columnbreak
+  \begin{flushright}论文编号：\ThesisNumber\end{flushright}
+\end{multicols}
+\vspace{\stretch{2}}
+\begin{center}
+  {\songti\fontsize{36bp}{43.2bp}\selectfont 专业学位硕士学位论文}
+  \vspace{\stretch{2}}
+
+  {\heiti\fontsize{26bp}{31.2bp}\selectfont\CoverTitle}
+\end{center}
+\vspace{\stretch{3}}
+\begin{center}
+  \songti\fontsize{16bp}{20bp}\selectfont
+  \begin{tabular}{l@{\hspace{1cm}}l}
+    研究生姓名 & \AuthorName \\
+    专业类别 & \ProfessionalCategory \\
+    专业领域 & \ProfessionalField \\
+    指导教师 & \Supervisor \\
+    \ifdefempty{\IndustrySupervisor}{}{行业导师 & \IndustrySupervisor \\}
+  \end{tabular}
+\end{center}
+\vspace{\stretch{3}}
+\begin{center}
+  {\jianqifont\fontsize{22bp}{26.4bp}\selectfont 南京航空航天大学}\par
+  {\songti\fontsize{14bp}{17.5bp}\selectfont 研究生院\quad\CollegeName\par\ChineseDate\par}
+\end{center}
+\par\endgroup
+\clearpage
+
+% ==================== 4. 英文封面 ====================
+\begingroup
+\begin{center}
+  \linespread{1.5}\fontsize{14bp}{14bp}\selectfont
+  Nanjing University of Aeronautics and Astronautics\par
+  The Graduate School\par
+  \EnglishCollege\vspace{\stretch{1}}
+
+  {\linespread{1}\fontsize{22bp}{26.4bp}\bfseries\selectfont\EnglishTitle\par}
+  \vspace{\stretch{1}}
+  \linespread{1.75}\fontsize{14bp}{16.8bp}\selectfont
+  A Thesis in\\\EnglishCategory\\by\\\EnglishAuthor\\
+  Advised by\\\EnglishSupervisor\par\bigskip
+  Submitted in Partial Fulfillment\\of the Requirements\\
+  for the Degree of\\\EnglishDegree\par\bigskip
+  \EnglishDate
+\end{center}
+\par\endgroup
+\clearpage
+
+% ==================== 5. 独创性与使用授权声明 ====================
+\clearpage\thispagestyle{empty}
+\begingroup\linespread{1}\songti\fontsize{16bp}{20bp}\selectfont
+\setlength{\parindent}{2\ccwd}\setlength{\parskip}{0pt}
+\begin{center}\songti\fontsize{22bp}{30bp}\selectfont 独创性声明\end{center}
+\vspace{15.6bp}
+\noindent\hspace*{2\ccwd}本人声明所呈交的硕士学位论文是本人在导师指导下进行的研究工作及取得的研究成果。除了文中特别加以标注和致谢的地方外，论文中不包含其他人已经发表或撰写过的研究成果，也不包含为获得南京航空航天大学或其他教育机构的学位或证书而使用过的材料。
+\par\vspace{7.8bp}\indent 研究生签名：\underline{\hspace{2.4cm}}\quad 日期：\underline{\hspace{2.4cm}}
+\par\vspace{25bp}
+\begin{center}\songti\fontsize{22bp}{30bp}\selectfont 使用授权声明\end{center}
+\vspace{15.6bp}
+\noindent\hspace*{2\ccwd}本人完全了解南京航空航天大学有关保留、使用学位论文的规定，即学校有权保留并向国家有关部门或机构送交论文的复印件和电子版，允许论文被查阅和借阅。本人授权南京航空航天大学可以将本学位论文的全部内容编入有关数据库进行检索，可以采用影印、缩印或扫描等复制手段保存、汇编学位论文。
+\par\vspace{7.8bp}\indent 研究生签名：\underline{\hspace{1.3cm}}导师签名：\underline{\hspace{1.3cm}}日期：\underline{\hspace{1.3cm}}
+\endgroup\clearpage
+
+
+% ==================== 中文摘要 ====================
+\frontmatter
+\pagenumbering{Roman}
+\pagestyle{thesis}
+\begingroup
+  % Word原生对比：15磅SimHei，两个同字体空格。
+  % 负间距用于抵消titlesec额外行框，实际标题/首行基线为114.72/140.88磅。
+  \xeCJKsetup{CJKecglue=0pt}
+  \titleformat{\chapter}{\centering\wordheiLatin\CJKfamily{wordhei}\fontsize{15bp}{20bp}\selectfont}{}{0pt}{}
+  \titlespacing*{\chapter}{0pt}{-8.786bp}{-13.84bp}
+  \chapter*{摘\hbox{\wordheiLatin\char32\char32}要}
+\endgroup
+\vspace{20bp} % 保持Word标题与首行正文的基线间距
+\ThesisInput{abstract-zh}
+
+\par\vspace{60bp}
+\noindent\textbf{关键词：}\ChineseKeywords
+\clearpage
+
+% ==================== 7. 英文摘要 ====================
+\begingroup
+  % Word原生格式：Times New Roman 14磅加粗，段前后0、单倍并对齐网格。
+  % 补偿titlesec行框，使标题基线距顶114.24磅。
+  \titlespacing*{\chapter}{0pt}{-9.266bp}{10.24bp}
+  \chapter*{{\rmfamily\bfseries\fontsize{14bp}{20bp}\selectfont ABSTRACT}}
+\endgroup
+\begingroup
+  \fontsize{10.5bp}{14bp}\selectfont
+  \setlength{\parindent}{10.5bp}
+  \XeTeXcharclass"2026=0\relax % 英文省略号使用Times New Roman，与Word一致
+\ThesisInput{abstract-en}
+
+  \par\vspace{44.56bp}
+  \noindent\makebox[59.493bp][l]{\textbf{Keywords:}}\EnglishKeywords
+  \par
+\endgroup
+\clearpage
+
+% ==================== 8. 目录与图表清单 ====================
+\FrontHeading{\contentsname}
+\makeatletter\@starttoc{toc}\makeatother
+\clearpage
+
+\FrontHeading{图表清单}
+\vspace{4.226bp} % 首行基线与目录首条保持一致
+\IfFileExists{\NUAAContentDirectory/figure-table-list.tex}{%
+  \ThesisInput{figure-table-list}%
+}{%
+  \csname @starttoc\endcsname{lof}%
+  \bigskip
+  \csname @starttoc\endcsname{lot}%
+}
+\clearpage
+
+\IfFileExists{\NUAAContentDirectory/symbols.tex}{%
+\FrontHeading{注释表}
+\begingroup\setlength{\tabcolsep}{4pt}
+\noindent\begin{tabularx}{\textwidth}[t]{|p{.23\textwidth}|X|p{.15\textwidth}|X|}\hline
+\ThesisInput{symbols} \\ \hline
+\end{tabularx}\endgroup
+\clearpage
+}{}
+
+\IfFileExists{\NUAAContentDirectory/abbreviations.tex}{%
+\FrontHeading{缩略词}
+% Word原表：两列、完整细边框；首列表头左对齐，其余单元格居中。
+\vspace{-11.364bp} % 表格上边框中心距顶126.24磅，与Word一致
+\begingroup
+  \fontsize{10.5bp}{19.44bp}\selectfont
+  \setlength{\tabcolsep}{5bp}
+  \setlength{\arrayrulewidth}{.48bp}
+  \noindent\hspace*{2.561bp}% Word表格比正文左边界内缩约2.6磅
+  \begin{tabular}[t]{|>{\centering\arraybackslash}p{60.56bp}|>{\centering\arraybackslash}p{344bp}|}
+    \hline
+    \multicolumn{1}{|l|}{缩略词} & 英文全称 \\ \hline
+    \ThesisInput{abbreviations} \\ \hline
+  \end{tabular}
+\par\endgroup
+
+\clearpage
+}{}

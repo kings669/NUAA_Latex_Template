@@ -1,0 +1,121 @@
+% 字体、页面、章标题、页眉页脚、目录和图表样式。
+\usepackage{geometry,fancyhdr}
+\usepackage[indentafter]{titlesec}
+\usepackage{titletoc}
+\usepackage{graphicx,multicol,tabularx,booktabs,longtable}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{caption}
+\usepackage[numbers,square,comma,super,sort&compress]{natbib}
+\usepackage{etoolbox}
+\usepackage[unicode,hidelinks]{hyperref}
+
+\setmainfont[Path=fonts/,BoldFont=timesbd.ttf,ItalicFont=timesi.ttf,BoldItalicFont=timesbi.ttf]{times.ttf}
+\setCJKmainfont[Path=fonts/,AutoFakeBold=2]{song.ttf}
+\setCJKsansfont[Path=fonts/]{hei.ttf}
+\setCJKmonofont[Path=fonts/]{fangsong.ttf}
+\setCJKfamilyfont{zhsong}[Path=fonts/,AutoFakeBold=2]{song.ttf}
+\setCJKfamilyfont{zhhei}[Path=fonts/]{hei.ttf}
+\setCJKfamilyfont{zhkai}[Path=fonts/]{kai.ttf}
+\setCJKfamilyfont{zhfs}[Path=fonts/]{fangsong.ttf}
+\newfontfamily\jianqifont[Path=fonts/]{jianqi.ttf}
+\providecommand\songti{\CJKfamily{zhsong}}
+\providecommand\heiti{\CJKfamily{zhhei}}
+\providecommand\kaishu{\CJKfamily{zhkai}}
+\providecommand\fangsong{\CJKfamily{zhfs}}
+
+\xeCJKDeclareCharClass{CJK}{"2573}
+
+% 摘要标题采用Word实际使用的SimHei，两个空格也使用同一字体。
+\newfontfamily\wordheiLatin[Path=fonts/]{simhei.ttf}
+\setCJKfamilyfont{wordhei}[Path=fonts/]{simhei.ttf}
+
+% A4双面；连续换页，不插入奇偶页补白。
+\geometry{asymmetric,top=3.3cm,bottom=3.3cm,left=3cm,right=2.8cm,
+  headheight=15.6bp,headsep=\dimexpr .7cm-15.6bp\relax,footskip=.7cm}
+\let\cleardoublepage\clearpage
+\linespread{1}
+\makeatletter
+% 这一处底层命令用于固定正文为五号、20磅行距。
+\renewcommand{\normalsize}{\@setfontsize\normalsize{10.5bp}{20bp}}
+\makeatother
+\normalsize
+\setlength{\parindent}{21bp}
+\setlength{\parskip}{0pt}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+\ctexset{chapter={lofskip=0pt,lotskip=0pt}}
+\titleformat{\chapter}{\centering\wordheiLatin\CJKfamily{wordhei}\fontsize{15bp}{20bp}\selectfont}
+  {第\chinese{chapter}章}{1em}{}
+\titleformat*{\section}{\heiti\fontsize{14bp}{20bp}\selectfont}
+\titleformat*{\subsection}{\heiti\fontsize{12bp}{20bp}\selectfont}
+\titleformat*{\subsubsection}{\heiti\fontsize{12bp}{20bp}\selectfont}
+% Word章标题：段前后各1.5行、固定20磅；补偿titlesec页首行框后对齐实际位置。
+\titlespacing*{\chapter}{0pt}{9.454bp}{23.44bp}
+\titlespacing*{\section}{0pt}{7.8bp}{7.8bp}
+\titlespacing*{\subsection}{0pt}{7.8bp}{7.8bp}
+\titlespacing*{\subsubsection}{0pt}{7.8bp}{7.8bp}
+
+% 页眉与页码：摘要起启用；奇数页学校，偶数页论文题目。
+% 页码按Word：奇数页右下角（OR），偶数页左下角（EL）。
+\fancypagestyle{thesis}{
+  \fancyhf{}
+  \fancyhead[C]{\songti\fontsize{10.5bp}{20bp}\selectfont
+    % 保留页眉行框，仅上移文字基线；避免调整横线后压住文字。
+    \strut\smash{\raisebox{3.461bp}{%
+      \ifodd\value{page}南京航空航天大学专业学位硕士学位论文\else\ThesisTitle\fi}}}
+
+  \fancyfoot[OR,EL]{\fontsize{7.5bp}{10bp}\selectfont\thepage}
+  % Word页眉：单倍行距、段前后0；下边框0.75磅，距文字1磅。
+  % fancyhdr默认横线偏低；上移5.381磅，保持摘要标题/正文位置不动。
+  \renewcommand{\headrulewidth}{.75bp}
+  \renewcommand{\headrule}{%
+    \vskip-5.381bp
+    \hrule height .75bp width\headwidth
+    \vskip4.631bp
+  }
+  \renewcommand{\footrulewidth}{0pt}
+}
+\makeatletter
+\let\ps@plain\ps@thesis
+\makeatother
+\assignpagestyle{\chapter}{thesis}
+
+% 前置页共用标题：与已核对的目录页保持同一位置和上下间距。
+\newcommand{\FrontHeading}[1]{%
+  \begingroup
+    \xeCJKsetup{CJKecglue=0pt}
+    \titleformat{\chapter}{\centering\wordheiLatin\CJKfamily{wordhei}\fontsize{15bp}{20bp}\selectfont}{}{0pt}{}
+    \titlespacing*{\chapter}{0pt}{-8.786bp}{3.684bp}
+    \chapter*{#1}
+  \endgroup
+}
+
+% 自动目录：按Word的标题、层级缩进与文档网格设置。
+\renewcommand{\contentsname}{目\hbox{\wordheiLatin\char32\char32}录}
+\newcommand{\TocFont}{\songti\fontsize{10.5bp}{15.6bp}\selectfont}
+\contentsmargin{5.395bp} % 页码右边缘按Word制表位对齐（约521磅）
+\newcommand{\TocPage}{\hbox to5.114bp{\leaders\hbox{.}\hfill}\contentspage\hspace*{-5.114bp}}
+\titlecontents{chapter}[56.35bp]{\addvspace{1.92bp}\TocFont}
+  {\contentslabel{36.75bp}}{\hspace*{-36.75bp}}
+  {\titlerule*[2.625bp]{.}\TocPage}[\vspace{1.92bp}]
+\titlecontents{section}[52.5bp]{\TocFont}
+  {\contentslabel[\wordheiLatin\thecontentslabel]{32.9bp}}{}
+  {\titlerule*[2.625bp]{.}\TocPage}
+\titlecontents{subsection}[70.87bp]{\TocFont}
+  {\contentslabel[\wordheiLatin\thecontentslabel]{28.87bp}}{}
+  {\titlerule*[2.625bp]{.}\TocPage}
+\DeclareCaptionFont{thesis}{\songti\fontsize{10.5bp}{20bp}\selectfont}
+\captionsetup{font=thesis,labelsep=quad,justification=centering}
+\captionsetup[table]{position=top}
+\newcommand{\figtabnote}[1]{\par{\kaishu\fontsize{10.5bp}{20bp}\selectfont（注：#1）}\par}
+\graphicspath{{\NUAAContentDirectory/fig/}{fig/}}
+\hypersetup{pdftitle={\ThesisTitle},pdfauthor={\AuthorName}}
+
+\newcommand{\ThesisAppendixHeading}[1]{%
+  \begingroup
+  \titlespacing*{\chapter}{0pt}{17bp}{16.5bp}%
+  \titleformat{\chapter}{\centering\heiti\fontsize{15bp}{26bp}\selectfont}{}{0pt}{}%
+  \chapter*{附录 #1}%
+  \addcontentsline{toc}{chapter}{附录 #1}%
+  \endgroup
+}

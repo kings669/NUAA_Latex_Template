@@ -1,20 +1,21 @@
 # NUAA LaTeX Template
 
-南京航空航天大学2026专业学位硕士学位论文单文件模板，依据提供的撰写要求和专硕 Word 模板整理。
+南京航空航天大学2026专业学位硕士学位论文模板，依据提供的撰写要求和专硕 Word 模板整理。
 
 ## 目录结构
 
 ```text
 NUAA_Latex_Template/
-├── master.tex                       # 唯一需要编辑的 LaTeX 源文件
-├── README.md                        # 使用说明
-├── fonts/                           # 源码实际使用的10个字体文件
-├── fig/                             # 放置自己的论文图片
+├── master.tex                  # 编译入口，选择个人稿或示例
+├── nuaa-layout.tex             # 字体、版面、页眉页脚与标题样式
+├── nuaa-frontmatter.tex        # 封面、声明、摘要、目录及清单的排版
+├── examples/                   # 随模板更新的示例内容
+├── thesis/                     # 自行创建，存放个人论文
+├── fonts/                      # 编译所用字体
+├── fig/                        # 兼容原模板的图片路径
 └── preview/
-    └── NUAA_Latex_Template.pdf       # 示例预览
+    └── NUAA_Latex_Template.pdf
 ```
-
-目录不包含历史备份、排版对比记录、重复字体、旧文档类或编译中间文件。
 
 ## 编译
 
@@ -36,20 +37,26 @@ xelatex -interaction=nonstopmode -halt-on-error -output-directory=build master.t
 
 使用 **XeLaTeX**，不能直接用 pdfLaTeX。字体按 `fonts/` 相对路径加载，无需全局安装。本模板直接使用标准 `ctexbook`，不需要自定义 `.cls`。
 
-## 从哪里修改
+## 开始写论文
 
-源码按阅读顺序分区：
+先复制一份可编译的内容作为起点：
 
-| 分区 | 内容 |
+```sh
+cp -R examples thesis
+```
+
+根目录存在 `thesis/metadata.tex` 时，`master.tex` 从 `thesis/` 读取内容，否则编译示例。已有 `thesis/` 时直接编辑其中的文件。
+
+| 文件 | 内容 |
 |---|---|
-| 1. 基本信息 | 中英文题名、作者、学院、专业、导师、日期、分类号与论文编号 |
-| 2. 字体与排版 | 字体、页面、行距、标题、页眉页脚和目录样式；一般无需修改 |
-| 3—4. 封面 | 自动引用开头的中英文信息 |
-| 5. 声明 | 独创性与使用授权声明，签名栏留空 |
-| 6—7. 摘要 | 直接替换中英文摘要正文与关键词 |
-| 8. 目录与前置表格 | 自动目录、示例图表清单、注释表、缩略词表 |
-| 9. 正文 | 直接增加章、节与正文 |
-| 10. 文后部分 | 参考文献、致谢、研究成果、附录 |
+| `thesis/metadata.tex` | 中英文封面信息及摘要关键词 |
+| `thesis/abstract-zh.tex`、`thesis/abstract-en.tex` | 中英文摘要正文 |
+| `thesis/chapters.tex` | 正文入口，可以用 `\input{thesis/chapters/01-introduction}` 按章拆分 |
+| `thesis/backmatter.tex` | 参考文献、致谢、研究成果及可选附录 |
+| `thesis/figure-table-list.tex` | 示例的手写清单。删除此副本后会自动生成图、表清单 |
+| `thesis/symbols.tex`、`thesis/abbreviations.tex` | 注释表和缩略词表的表格行。最后一行由模板加底线，无需写 \\ \hline。可省略对应文件 |
+| `thesis/preamble.tex` | 可选，用于加载个人论文所需的宏包和自定义命令 |
+| `thesis/fig/` | 论文图片 |
 
 ### 基本信息
 
@@ -70,7 +77,7 @@ xelatex -interaction=nonstopmode -halt-on-error -output-directory=build master.t
 
 当前是与 Word 对应的示例，需替换为自己的内容。硕士中文摘要按提供的要求为400—600字、关键词5—8个，中英文内容应对应。
 
-在正文分区增加章节：
+在 `thesis/chapters.tex` 或其引用的文件中增加章节：
 
 ```tex
 \chapter{相关理论与技术}
@@ -82,7 +89,7 @@ xelatex -interaction=nonstopmode -halt-on-error -output-directory=build master.t
 
 ### 图片和表格
 
-图片放入 `fig/`，例如 `fig/system.pdf`：
+图片放入 `thesis/fig/`，例如 `thesis/fig/system.pdf`：
 
 ```tex
 \begin{figure}[htbp]
@@ -95,19 +102,11 @@ xelatex -interaction=nonstopmode -halt-on-error -output-directory=build master.t
 
 图题置于图下，表题放在表格内容上方。通过 `\ref{fig:system}` 引用，图表注释可使用 `\figtabnote{说明文字}`。
 
-当前图表清单保留 Word 示例名称与示例页码，**不会随插图自动更新**。实际写作后，可将清单标题下的示例条目替换为：
-
-```tex
-\makeatletter
-\@starttoc{lof}
-\bigskip
-\@starttoc{lot}
-\makeatother
-```
+自动图表清单从各图表的 `\caption` 提取条目，重复编译后更新页码。
 
 ### 参考文献
 
-当前文后保留的是 Word 中的著录格式示例，需替换为真实文献。保持单文件可使用手写文献，将原“参考文献”标题及示例内容整体替换为：
+当前文后保留的是 Word 中的著录格式示例，需替换为真实文献。可在 `thesis/backmatter.tex` 中使用手写文献，将示例的“参考文献”标题及其条目整体替换为：
 
 ```tex
 \begin{thebibliography}{99}
@@ -116,6 +115,28 @@ xelatex -interaction=nonstopmode -halt-on-error -output-directory=build master.t
 ```
 
 正文用 `\cite{sample}` 自动生成上标顺序编号。绪论中的 `[1]` 是原 Word 演示标记，录入真实文献后也应替换为引用命令。不要同时保留原“参考文献”章标题与 `thebibliography`，避免双标题。
+
+## 从模板同步排版更新
+
+在 GitHub 创建一个空的私有论文仓库。克隆本模板，将模板远端改名为 `upstream`，然后把自己的私有仓库添加为 `origin`：
+
+```sh
+git clone git@github.com:kings669/NUAA_Latex_Template.git nuaa-thesis
+cd nuaa-thesis
+git remote rename origin upstream
+git remote add origin git@github.com:你的GitHub用户名/nuaa-thesis.git
+git push -u origin main
+```
+
+将个人内容提交到 `thesis/` 下。每次同步前先提交手头的论文修改，然后执行：
+
+```sh
+git fetch upstream
+git merge upstream/main
+latexmk -xelatex -outdir=build master.tex
+```
+
+检查 PDF 后可用 `git push origin main` 更新私有仓库。模板维护者请将示例修改放在 `examples/`。
 
 ## 当前排版约定
 
